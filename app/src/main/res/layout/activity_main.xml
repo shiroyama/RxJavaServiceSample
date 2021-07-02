@@ -7,19 +7,35 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button_oneshot"
+        android:id="@+id/button_oneshot_messenger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ONESHOT"
+        android:text="ONESHOT Messenger"
         android:layout_centerInParent="true"
         />
     <Button
-        android:id="@+id/button_continuous"
+        android:id="@+id/button_continuous_messenger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CONTINUOUS"
+        android:text="CONTINUOUS Messenger"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/button_oneshot"
+        android:layout_below="@id/button_oneshot_messenger"
+        />
+    <Button
+        android:id="@+id/button_oneshot_aidl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ONESHOT AIDL"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/button_continuous_messenger"
+        />
+    <Button
+        android:id="@+id/button_continuous_aidl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CONTINUOUS AIDL"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/button_oneshot_aidl"
         />
 
 </RelativeLayout>

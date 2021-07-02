@@ -18,7 +18,8 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private MessageClient messageClient;
+    private MessageClient messageClientMessenger;
+    private AIDLMessageClient messageClientAIDL;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
@@ -26,11 +27,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        messageClient = new MessageClient(this);
+        messageClientMessenger = new MessageClient(this);
+        messageClientAIDL = new AIDLMessageClient(this);
 
-        Button buttonOneshot = (Button) findViewById(R.id.button_oneshot);
-        buttonOneshot.setOnClickListener(v -> {
-            Disposable disposable = messageClient.getCurrentTimeOneshot()
+        Button buttonOneshotMessenger = (Button) findViewById(R.id.button_oneshot_messenger);
+        buttonOneshotMessenger.setOnClickListener(v -> {
+            Disposable disposable = messageClientMessenger.getCurrentTimeOneshot()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
@@ -43,9 +45,42 @@ public class MainActivity extends AppCompatActivity {
                     );
             compositeDisposable.add(disposable);
         });
-        Button buttonContinuous = (Button) findViewById(R.id.button_continuous);
-        buttonContinuous.setOnClickListener(v -> {
-            Disposable disposable = messageClient.getCurrentTimeContinuously()
+
+        Button buttonContinuousMessenger = (Button) findViewById(R.id.button_continuous_messenger);
+        buttonContinuousMessenger.setOnClickListener(v -> {
+            Disposable disposable = messageClientMessenger.getCurrentTimeContinuously()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            text -> {
+                                Log.d(TAG, "onNext: " + text);
+                                toast("Continuous: " + text);
+                            },
+                            error -> Log.e(TAG, "onError: " + error.getMessage(), error),
+                            () -> Log.d(TAG, "onComplete")
+                    );
+            compositeDisposable.add(disposable);
+        });
+
+        Button buttonOneshotAIDL = (Button) findViewById(R.id.button_oneshot_aidl);
+        buttonOneshotAIDL.setOnClickListener(v -> {
+            Disposable disposable = messageClientAIDL.getCurrentTimeOneshot()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            text -> {
+                                Log.d(TAG, "onNext: " + text);
+                                toast("Oneshot: " + text);
+                            },
+                            error -> Log.e(TAG, "onError: " + error.getMessage(), error),
+                            () -> Log.d(TAG, "onComplete")
+                    );
+            compositeDisposable.add(disposable);
+        });
+
+        Button buttonContinuousAIDL = (Button) findViewById(R.id.button_continuous_aidl);
+        buttonContinuousAIDL.setOnClickListener(v -> {
+            Disposable disposable = messageClientAIDL.getCurrentTimeContinuously()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
@@ -66,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        messageClient.destroy();
+        messageClientMessenger.destroy();
+        messageClientAIDL.destroy();
         compositeDisposable.dispose();
         super.onDestroy();
     }

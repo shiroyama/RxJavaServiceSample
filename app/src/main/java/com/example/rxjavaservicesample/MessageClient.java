@@ -16,7 +16,7 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
 /**
- * Message client that binds to Remote Service
+ * Message client that binds to Remote Service through {@link Messenger}
  */
 public class MessageClient {
     private static final String TAG = MessageClient.class.getSimpleName();
@@ -45,7 +45,7 @@ public class MessageClient {
             }
         };
 
-        this.context.bindService(new Intent(context, MessengerService.class), serviceConnection, Service.BIND_AUTO_CREATE);
+        this.context.bindService(new Intent(this.context, MessengerService.class), serviceConnection, Service.BIND_AUTO_CREATE);
     }
 
     /**

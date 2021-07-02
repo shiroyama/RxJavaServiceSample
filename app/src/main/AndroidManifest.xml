@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <service android:name=".MessengerService" />
+        <service android:name=".AIDLMessengerService" />
     </application>
 
 </manifest>
